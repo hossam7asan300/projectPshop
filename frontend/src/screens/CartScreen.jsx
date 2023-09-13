@@ -30,11 +30,9 @@ const CartScreen = () => {
    const checkoutHandler = () => {
       // navigate("/login?redirect=shipping");
       if (userInfo) {
-         // navigate("/shipping");
-         toast.success("User Info Found");
+         navigate("/shipping");
       } else {
-         // navigate("/login?redirect=shipping");
-         toast.error("User Info Not Found");
+         navigate("/login?redirect=shipping");
       }
       // navigate("/shipping");
       // } else {
