@@ -43,7 +43,7 @@ const RegisterScreen = ({ location, history }) => {
             }).unwrap();
             dispatch(setCredentials({ ...res }));
             navigate(redirect);
-            toast.success(`Registration Successful ${isSupplier}}`);
+            toast.success(`Registration Successful}`);
          } catch (error) {
             toast.error(error?.data?.message || error.error);
          }
@@ -105,16 +105,6 @@ const RegisterScreen = ({ location, history }) => {
                disabled={isLoading}
             >
                Register
-            </Button>
-            <Button
-               type="button"
-               variant="secondary"
-               className="mt-2 mx-2"
-               onClick={() => {
-                  toast.success(`${isSupplier}} Test Successful ${name}} `);
-               }}
-            >
-               Test{" "}
             </Button>
             {isLoading && <Loader />}
          </Form>
