@@ -14,7 +14,6 @@ import Rating from "../components/Rating";
 import {
    useGetProductDetailsQuery,
    useCreateReviewMutation,
-   // useUpdateProductQtyMutation,
 } from "../slices/productsApiSlice";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
