@@ -13,7 +13,6 @@ import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import { addToCart, removeFromCart } from "../slices/cartSlice";
 import { FaTrash } from "react-icons/fa";
-import { toast } from "react-toastify";
 
 const CartScreen = () => {
    const navigate = useNavigate();
@@ -28,16 +27,11 @@ const CartScreen = () => {
    };
    const { userInfo } = useSelector((state) => state.auth);
    const checkoutHandler = () => {
-      // navigate("/login?redirect=shipping");
       if (userInfo) {
          navigate("/shipping");
       } else {
          navigate("/login?redirect=shipping");
       }
-      // navigate("/shipping");
-      // } else {
-      //    navigate("/login?redirect=shipping");
-      // }
    };
 
    return (

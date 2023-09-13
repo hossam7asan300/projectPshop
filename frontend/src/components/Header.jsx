@@ -94,6 +94,13 @@ const Header = () => {
                            </LinkContainer>
                         </NavDropdown>
                      )}
+                     {userInfo && userInfo.isSupplier && (
+                        <NavDropdown title="Supplier" id="suppliermenu">
+                           <LinkContainer to="/supplier/myproductlist">
+                              <NavDropdown.Item>MyProducts</NavDropdown.Item>
+                           </LinkContainer>
+                        </NavDropdown>
+                     )}
                   </Nav>
                </Navbar.Collapse>
             </Container>

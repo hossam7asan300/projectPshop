@@ -18,6 +18,7 @@ const authUser = asyncHandler(async (req, res) => {
          name: user.name,
          email: user.email,
          isAdmin: user.isAdmin,
+         isSupplier: user.isSupplier,
       });
    } else {
       res.status(401);
@@ -29,7 +30,7 @@ const authUser = asyncHandler(async (req, res) => {
 // @route   POST /api/users
 // @access  Public
 const registerUser = asyncHandler(async (req, res) => {
-   const { name, email, password } = req.body;
+   const { name, email, password, isSupplier } = req.body;
 
    const userExists = await User.findOne({ email });
 
@@ -42,6 +43,7 @@ const registerUser = asyncHandler(async (req, res) => {
       name,
       email,
       password,
+      isSupplier,
    });
 
    if (user) {
@@ -52,6 +54,7 @@ const registerUser = asyncHandler(async (req, res) => {
          name: user.name,
          email: user.email,
          isAdmin: user.isAdmin,
+         isSupplier: user.isSupplier,
       });
    } else {
       res.status(400);
@@ -82,6 +85,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
          name: user.name,
          email: user.email,
          isAdmin: user.isAdmin,
+         isSupplier: user.isSupplier,
       });
    } else {
       res.status(404);
@@ -110,6 +114,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
          name: updatedUser.name,
          email: updatedUser.email,
          isAdmin: updatedUser.isAdmin,
+         isSupplier: updatedUser.isSupplier,
       });
    } else {
       res.status(404);
@@ -167,6 +172,7 @@ const updateUser = asyncHandler(async (req, res) => {
       user.name = req.body.name || user.name;
       user.email = req.body.email || user.email;
       user.isAdmin = Boolean(req.body.isAdmin);
+      user.isSupplier = Boolean(req.body.isSupplier);
 
       const updatedUser = await user.save();
 
@@ -175,6 +181,7 @@ const updateUser = asyncHandler(async (req, res) => {
          name: updatedUser.name,
          email: updatedUser.email,
          isAdmin: updatedUser.isAdmin,
+         isSupplier: updatedUser.isSupplier,
       });
    } else {
       res.status(404);

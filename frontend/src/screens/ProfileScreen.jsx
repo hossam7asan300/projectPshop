@@ -16,6 +16,8 @@ const ProfileScreen = () => {
    const [email, setEmail] = useState("");
    const [password, setPassword] = useState("");
    const [confirmPassword, setConfirmPassword] = useState("");
+   const [isAdmin, setIsAdmin] = useState(false);
+   const [isSupplier, setIsSupplier] = useState(false);
 
    const { userInfo } = useSelector((state) => state.auth);
 
@@ -27,7 +29,9 @@ const ProfileScreen = () => {
    useEffect(() => {
       setName(userInfo.name);
       setEmail(userInfo.email);
-   }, [userInfo.email, userInfo.name]);
+      setIsAdmin(userInfo.isAdmin);
+      setIsSupplier(userInfo.isSupplier);
+   }, [userInfo]);
 
    const dispatch = useDispatch();
    const submitHandler = async (e) => {
@@ -41,6 +45,7 @@ const ProfileScreen = () => {
                name,
                email,
                password,
+               isSupplier,
             }).unwrap();
             dispatch(setCredentials({ ...res }));
             toast.success("Profile updated successfully");
@@ -94,6 +99,18 @@ const ProfileScreen = () => {
                      value={confirmPassword}
                      onChange={(e) => setConfirmPassword(e.target.value)}
                   ></Form.Control>
+               </Form.Group>
+
+               <Form.Group
+                  className={`my-2 ${isAdmin ? "d-none" : ""}`}
+                  controlId="issupplier"
+               >
+                  <Form.Check
+                     type="checkbox"
+                     label="Is Supplier to"
+                     checked={isAdmin ? false : isSupplier}
+                     onChange={(e) => setIsSupplier(e.target.checked)}
+                  ></Form.Check>
                </Form.Group>
 
                <Button type="submit" variant="primary">

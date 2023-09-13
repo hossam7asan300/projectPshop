@@ -13,6 +13,7 @@ const RegisterScreen = ({ location, history }) => {
    const [email, setEmail] = useState("");
    const [password, setPassword] = useState("");
    const [confirmPassword, setConfirmPassword] = useState("");
+   const [isSupplier, setIsSupplier] = useState(false);
    const dispatch = useDispatch();
    const navigate = useNavigate();
    const [register, { isLoading }] = useRegisterMutation();
@@ -34,10 +35,15 @@ const RegisterScreen = ({ location, history }) => {
          return;
       } else {
          try {
-            const res = await register({ name, email, password }).unwrap();
+            const res = await register({
+               name,
+               email,
+               password,
+               isSupplier,
+            }).unwrap();
             dispatch(setCredentials({ ...res }));
             navigate(redirect);
-            toast.success("Registration Successful");
+            toast.success(`Registration Successful ${isSupplier}}`);
          } catch (error) {
             toast.error(error?.data?.message || error.error);
          }
@@ -83,6 +89,15 @@ const RegisterScreen = ({ location, history }) => {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                ></Form.Control>
             </Form.Group>
+
+            <Form.Group controlId="isSupplier" className="my-3">
+               <Form.Check
+                  type="checkbox"
+                  label="Are you a supplier?"
+                  onChange={(e) => setIsSupplier(e.target.checked)}
+               ></Form.Check>
+            </Form.Group>
+
             <Button
                type="submit"
                variant="primary"
@@ -90,6 +105,16 @@ const RegisterScreen = ({ location, history }) => {
                disabled={isLoading}
             >
                Register
+            </Button>
+            <Button
+               type="button"
+               variant="secondary"
+               className="mt-2 mx-2"
+               onClick={() => {
+                  toast.success(`${isSupplier}} Test Successful ${name}} `);
+               }}
+            >
+               Test{" "}
             </Button>
             {isLoading && <Loader />}
          </Form>
