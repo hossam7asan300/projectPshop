@@ -8,18 +8,26 @@ import Message from "../components/Message";
 import Paginate from "../components/Paginate";
 import ProductCarousel from "../components/ProductCarousel";
 import Meta from "../components/Meta";
+import CategoryBox from "../components/CategoryBox";
+// import CategoryCheckBox from "../components/CategoryCheckBox";
+import BrandBox from "../components/BrandBox";
+import PriceBox from "../components/PriceBox";
+import RatingBox from "../components/RatingBox";
 
 const HomeScreen = () => {
-   const { pageNumber, keyword } = useParams();
+   const { pageNumber, keyword, category, brand, rating } = useParams();
 
    const { data, isLoading, error } = useGetProductsQuery({
       keyword,
       pageNumber,
+      category,
+      brand,
+      rating,
    });
 
    return (
       <>
-         {!keyword ? (
+         {!keyword && !category && !brand && !rating ? (
             <ProductCarousel />
          ) : (
             <Link to="/" className="btn btn-light mb-4">
@@ -36,6 +44,23 @@ const HomeScreen = () => {
             <>
                <Meta />
                <h1>Latest Products</h1>
+               <Row>
+                  {/* <Col md={3}>
+                     <CategoryCheckBox />
+                  </Col> */}
+                  <Col md={3}>
+                     <CategoryBox />
+                  </Col>
+                  <Col md={3}>
+                     <BrandBox />
+                  </Col>
+                  <Col md={3}>
+                     <PriceBox />
+                  </Col>
+                  <Col md={3}>
+                     <RatingBox />
+                  </Col>
+               </Row>
                <Row>
                   {data.products.map((product) => (
                      <Col key={product._id} sm={12} md={6} lg={4} xl={3}>

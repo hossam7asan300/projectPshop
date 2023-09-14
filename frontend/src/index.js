@@ -41,7 +41,11 @@ const router = createBrowserRouter(
       <Route path="/" element={<App />}>
          <Route index={true} path="/" element={<HomeScreen />} />
          <Route path="/search/:keyword" element={<HomeScreen />} />
+         <Route path="/category/:category" element={<HomeScreen />} />
+         <Route path="/brand/:brand" element={<HomeScreen />} />
+         <Route path="/Rating/:rating" element={<HomeScreen />} />
          <Route path="/page/:pageNumber" element={<HomeScreen />} />
+
          <Route
             path="/search/:keyword/page/:pageNumber"
             element={<HomeScreen />}
