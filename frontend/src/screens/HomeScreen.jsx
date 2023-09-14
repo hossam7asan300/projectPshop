@@ -13,9 +13,11 @@ import CategoryBox from "../components/CategoryBox";
 import BrandBox from "../components/BrandBox";
 import PriceBox from "../components/PriceBox";
 import RatingBox from "../components/RatingBox";
+import PriceBox2 from "../components/PriceBox2";
 
 const HomeScreen = () => {
-   const { pageNumber, keyword, category, brand, rating } = useParams();
+   const { pageNumber, keyword, category, brand, rating, priceFrom, priceTo } =
+      useParams();
 
    const { data, isLoading, error } = useGetProductsQuery({
       keyword,
@@ -23,6 +25,8 @@ const HomeScreen = () => {
       category,
       brand,
       rating,
+      priceFrom,
+      priceTo,
    });
 
    return (
@@ -45,9 +49,6 @@ const HomeScreen = () => {
                <Meta />
                <h1>Latest Products</h1>
                <Row className="">
-                  {/* <Col md={3}>
-                     <CategoryCheckBox />
-                  </Col> */}
                   <Col md={3}>
                      <CategoryBox />
                   </Col>

@@ -5,15 +5,15 @@ import Product from "../models/productModel.js";
 // @route   GET /api/products
 // @access  Public
 const getProducts = asyncHandler(async (req, res) => {
-   console.log(
-      req.query.category +
-         " " +
-         req.query.keyword +
-         " " +
-         req.query.brand +
-         " " +
-         req.query.rating
-   );
+   console.log({
+      category: req.query.category,
+      keyword: req.query.keyword,
+      brand: req.query.brand,
+      rating: req.query.rating,
+      priceFrom: req.query.priceFrom,
+      price: req.query.price,
+      req: req.query,
+   });
 
    const pageSize = process.env.PAGINATION_LIMIT;
    const page = Number(req.query.pageNumber) || 1;
@@ -58,12 +58,23 @@ const getProducts = asyncHandler(async (req, res) => {
            },
         };
 
+   const price =
+      Number(req.query.priceFrom) && Number(req.query.priceTo)
+         ? {
+              price: {
+                 $gte: Number(req.query.priceFrom),
+                 $lte: Number(req.query.priceTo),
+              },
+           }
+         : {};
+
    const count = await Product.countDocuments({ ...keyword });
    const products = await Product.find({
       ...keyword,
       ...category,
       ...brand,
       ...rating,
+      ...price,
    })
       .limit(pageSize)
       .skip(pageSize * (page - 1));
