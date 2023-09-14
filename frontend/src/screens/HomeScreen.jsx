@@ -44,7 +44,7 @@ const HomeScreen = () => {
             <>
                <Meta />
                <h1>Latest Products</h1>
-               <Row>
+               <Row className="">
                   {/* <Col md={3}>
                      <CategoryCheckBox />
                   </Col> */}

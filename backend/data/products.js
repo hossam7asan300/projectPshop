@@ -71,6 +71,115 @@ const products = [
       rating: 4,
       numReviews: 12,
    },
+   {
+      name: "Mens Casual Premium Slim Fit T-Shirts",
+      image: "/images/Shirts1.jpg",
+      description:
+         "Slim-fitting style, contrast raglan long sleeve, three-button henley placket, light weight & soft fabric for breathable and comfortable wearing. And Solid stitched shirts with round neck made for durability and a great fit for casual fashion wear and diehard baseball fans. The Henley style round neckline includes a three-button placket.",
+      brand: "Nike",
+      category: "Shirts",
+      price: 25.99,
+      countInStock: 20,
+      rating: 4.5,
+      numReviews: 10,
+   },
+   {
+      name: "John Hardy Women's Legends Naga Gold & Silver Dragon Station Chain Bracelet",
+      image: "/images/Jewelry1.jpg",
+      description:
+         "From our Legends Collection, the Naga was inspired by the mythical water dragon that protects the ocean's pearl. Wear facing inward to be bestowed with love and abundance, or outward for protection.",
+      brand: "John Hardy",
+      category: "Jewelry",
+      price: 695,
+      countInStock: 15,
+      rating: 4,
+      numReviews: 5,
+   },
+   {
+      name: "Solid Gold Petite Micropave ",
+      image: "/images/Ring1.jpg",
+      description:
+         "SOLID 14 KARAT GOLD - Rest assured that this ring is real gold, 14K White Gold with 14k stamped. Our rings are hypoallergenic. The ring is lightweight, comfortable, and durable",
+      brand: "Pavoi",
+      category: "Rings",
+      price: 168,
+      countInStock: 10,
+      rating: 4,
+      numReviews: 8,
+   },
+   {
+      name: "White Gold Plated Princess",
+      image: "/images/Ring2.jpg",
+      description:
+         "This wedding band ring is made from genuine .925 sterling silver and semi-circle sparkling white round-cut cubic zirconia, finished in high polish",
+      brand: "Pavoi",
+      category: "Rings",
+      price: 99,
+      countInStock: 5,
+      rating: 4.5,
+      numReviews: 10,
+   },
+
+   {
+      name: "DANVOUY Womens T Shirt Casual Cotton Short",
+      image: "/images/Shirts3.jpg",
+      description:
+         "95%Cotton,5%Spandex, Features: Casual, Short Sleeve, Letter Print,V-Neck,Fashion Tees, The fabric is soft and has some stretch.",
+      brand: "DANVOUY",
+      category: "Shirts",
+      price: 12.99,
+      countInStock: 10,
+      rating: 4.5,
+      numReviews: 12,
+   },
+   {
+      name: "SanDisk SSD PLUS 1TB Internal SSD - SATA III 6 Gb/s",
+      image: "/images/HardDrive1.jpg",
+      description:
+         "Easy upgrade for faster boot-up, shutdown, application load and response (As compared to 5400 RPM SATA 2.5” hard drive. Based on published specifications and internal benchmarking tests using PCMark vantage scores.)",
+      brand: "SanDisk",
+      category: "Hard Drives",
+      price: 109.99,
+      countInStock: 10,
+      rating: 4.5,
+      numReviews: 12,
+   },
+   {
+      name: "Silicon Power 256GB SSD 3D NAND A55 SLC Cache Performance Boost SATA III 2.5",
+      image: "/images/HardDrive2.jpg",
+      description:
+         "3D NAND flash are applied to deliver high transfer speeds, Remarkable transfer speeds that enable faster bootup and improved overall system performance. The advanced SLC Cache Technology allows performance boost and longer lifespan.",
+      brand: "Silicon Power",
+      category: "Hard Drives",
+      price: 209.99,
+      countInStock: 8,
+      rating: 4,
+      numReviews: 12,
+   },
+   {
+      name: "Pierced Owl Rose Gold Plated Stainless Steel Double",
+      image: "/images/Jewelry2.jpg",
+      description:
+         "Rose Gold Plated Double Flared Tunnel Plug Earrings. Made of 316L Stainless Steel",
+      brand: "Pierced Owl",
+      category: "Jewelry",
+      price: 10.99,
+      countInStock: 10,
+      rating: 4,
+      numReviews: 12,
+   },
+   {
+      name: "Mens Cotton Jacket",
+      image: "/images/Jacket1.jpg",
+      description:
+         "Great For Casual Daily Work Wear, Safari, Sightseeing, Fishing, Camping, Traveling, Photography, Machine Wash: Normal Cycle, Hang Dry.",
+      brand: "Tommy Hilfiger",
+      category: "Jackets",
+      price: 65.99,
+      countInStock: 10,
+      rating: 4,
+      numReviews: 12,
+   },
 ];
 
 export default products;
