@@ -1,64 +1,62 @@
-import React, { useState } from "react";
 import { Form } from "react-bootstrap";
-import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useGetProductsQuery } from "../slices/productsApiSlice";
-import Loader from "./Loader";
-import Message from "./Message";
+import { useDispatch } from "react-redux";
+import { setFilter } from "../slices/filterSlice";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const BrandBox = () => {
    const navigate = useNavigate();
-   const { BrandBox: urlBrand } = useParams();
+   const dispatch = useDispatch();
+
+   const { filter } = useSelector((state) => state.filter);
+
    const { category } = useParams();
 
-   // FIX: uncontrolled input - urlKeyword may be undefined
-   const [Brand, setBrand] = useState(urlBrand || "");
-
-   const { data, isLoading, error } = useGetProductsQuery({ category });
-
+   const { data } = useGetProductsQuery({ category });
    const submitHandler = (e) => {
       e.preventDefault();
-      setBrand(e.target.value);
+      dispatch(setFilter({ category: category, brand: e.target.value }));
+
+      toast.success("category = " + category + "brand" + e.target.value);
       if (e.target.value !== "") {
-         navigate(`/brand/${e.target.value}`);
+         if (category !== "") {
+            navigate(`/category/${category}/brand/${e.target.value}`);
+         } else {
+            navigate(`/brand/${e.target.value}`);
+         }
       } else {
-         navigate("/");
+         if (category !== "") {
+            navigate(`/category/${category}`);
+         } else {
+            navigate(`/`);
+         }
       }
    };
 
    return (
-      <>
-         {isLoading ? (
-            <Loader />
-         ) : error ? (
-            <Message variant="danger">{error}</Message>
-         ) : (
-            //Select Brand Box - START
-            <Form.Group controlId="Brand">
-               <Form.Label>Brand {Brand}</Form.Label>
-               <Form.Control
-                  as="select"
-                  value={Brand}
-                  className="my-2"
-                  onChange={(e) => {
-                     submitHandler(e);
-                  }}
-               >
-                  <option value="">All</option>
-                  {data.products
-                     .map((product) => product.brand)
-                     .filter(
-                        (value, index, self) => self.indexOf(value) === index
-                     )
-                     .map((brand, index) => (
-                        <option key={index} value={brand}>
-                           {brand}
-                        </option>
-                     ))}
-               </Form.Control>
-            </Form.Group>
-         )}
-      </>
+      <Form.Group controlId="Brand">
+         <Form.Label>Brand {filter.brand}</Form.Label>
+         <Form.Control
+            as="select"
+            value={filter.brand}
+            className="my-2"
+            onChange={(e) => {
+               submitHandler(e);
+            }}
+         >
+            <option value="">All</option>
+            {data.products
+               .map((product) => product.brand)
+               .filter((value, index, self) => self.indexOf(value) === index)
+               .map((brand, index) => (
+                  <option key={index} value={brand}>
+                     {brand}
+                  </option>
+               ))}
+         </Form.Control>
+      </Form.Group>
    );
 };
 

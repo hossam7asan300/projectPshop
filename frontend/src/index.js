@@ -49,9 +49,36 @@ const router = createBrowserRouter(
             path="/priceFrom/:priceFrom/priceTo/:priceTo"
             element={<HomeScreen />}
          />
+         <Route
+            path="/category/:category/brand/:brand"
+            element={<HomeScreen />}
+         />
+         <Route
+            path="/category/:category/brand/:brand/rating/:rating"
+            element={<HomeScreen />}
+         />
+         <Route
+            path="/category/:category/brand/:brand/rating/:rating/priceFrom/:priceFrom/priceTo/:priceTo"
+            element={<HomeScreen />}
+         />
+         <Route
+            path="/category/:category/rating/:rating"
+            element={<HomeScreen />}
+         />
+         <Route
+            path="/category/:category/rating/:rating/priceFrom/:priceFrom/priceTo/:priceTo"
+            element={<HomeScreen />}
+         />
+         <Route
+            path="/category/:category/priceFrom/:priceFrom/priceTo/:priceTo"
+            element={<HomeScreen />}
+         />
+         <Route
+            path="/category/:category/brand/:brand/priceFrom/:priceFrom/priceTo/:priceTo"
+            element={<HomeScreen />}
+         />
 
          <Route path="/page/:pageNumber" element={<HomeScreen />} />
-         <Route path="/price/:price" element={<HomeScreen />} />
 
          <Route
             path="/search/:keyword/page/:pageNumber"

@@ -8,6 +8,7 @@ import { useLogoutMutation } from "../slices/usersApiSlice";
 import { logout } from "../slices/authSlice";
 import logo from "../assets/logo.png";
 import SearchBox from "./SearchBox";
+import { clearFilter } from "../slices/filterSlice";
 
 const Header = () => {
    const { cartItems } = useSelector((state) => state.cart);
@@ -19,7 +20,6 @@ const Header = () => {
 
    // console.log(cartItems.length);
    const logoutHandler = async (e) => {
-      console.log("test");
       try {
          await logoutApiCall().unwrap();
          dispatch(logout());
@@ -32,7 +32,13 @@ const Header = () => {
       <header>
          <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
             <Container>
-               <LinkContainer to="/">
+               <LinkContainer
+                  to="/"
+                  onClick={() => {
+                     dispatch(clearFilter());
+                     console.log("clearFilter");
+                  }}
+               >
                   <Navbar.Brand>
                      <img
                         src={logo}

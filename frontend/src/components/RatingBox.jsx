@@ -1,66 +1,97 @@
-import React, { useState } from "react";
 import { Form } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useGetProductsQuery } from "../slices/productsApiSlice";
-import Loader from "./Loader";
-import Message from "./Message";
+
+import { useDispatch } from "react-redux";
+import { setFilter } from "../slices/filterSlice";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const BrandBox = () => {
    const navigate = useNavigate();
-   const { RatingBox: urlRating } = useParams();
-   const { category } = useParams();
+   const dispatch = useDispatch();
 
-   // FIX: uncontrolled input - urlKeyword may be undefined
-   const [Rating, setRating] = useState(urlRating || "");
+   const { filter } = useSelector((state) => state.filter);
 
-   const { data, isLoading, error } = useGetProductsQuery({ category });
+   const { category, brand } = useParams();
 
+   const { data } = useGetProductsQuery({ category, brand });
    const submitHandler = (e) => {
       e.preventDefault();
-      setRating(e.target.value);
-      if (e.target.value !== "") {
-         navigate(`/Rating/${e.target.value}`);
+      dispatch(
+         setFilter({
+            category: category,
+            brand: brand,
+            rating: e.target.value,
+         })
+      );
+
+      if (e.target.value > "") {
+         if (category > "") {
+            if (brand > "") {
+               toast.success(1);
+               navigate(
+                  `/category/${category}/brand/${brand}/rating/${e.target.value}`
+               );
+            } else {
+               navigate(`/category/${category}/rating/${e.target.value}`);
+               toast.success(2);
+            }
+         } else {
+            if (brand > "") {
+               navigate(`/brand/${brand}/rating/${e.target.value}`);
+               toast.success(3);
+            } else {
+               navigate(`/rating/${e.target.value}`);
+               toast.success(4);
+            }
+         }
       } else {
-         navigate("/");
+         if (category > "") {
+            if (brand > "") {
+               navigate(`/category/${category}/brand/${brand}`);
+               toast.success(5);
+            } else {
+               navigate(`/category/${category}`);
+               toast.success(6);
+            }
+         } else {
+            if (brand > "") {
+               navigate(`/brand/${brand}`);
+               toast.success(7);
+            } else {
+               navigate(`/`);
+               toast.success(8);
+            }
+         }
       }
    };
 
    return (
-      <>
-         {isLoading ? (
-            <Loader />
-         ) : error ? (
-            <Message variant="danger">{error}</Message>
-         ) : (
-            //Select Brand Box - START
-            <Form.Group controlId="Brand">
-               <Form.Label>Rating {Rating}</Form.Label>
-               <Form.Control
-                  as="select"
-                  value={Rating}
-                  className="my-2"
-                  onChange={(e) => {
-                     submitHandler(e);
-                  }}
-               >
-                  <option value="">All</option>
+      <Form.Group controlId="Brand">
+         <Form.Label>Rating {filter.rating}</Form.Label>
+         <Form.Control
+            as="select"
+            value={filter.rating}
+            className="my-2"
+            onChange={(e) => {
+               submitHandler(e);
+            }}
+         >
+            <option value="">All</option>
 
-                  {data.products
-                     .map((product) => parseInt(product.rating))
-                     .filter(
-                        (value, index, self) => self.indexOf(value) === index
-                     )
-                     .sort()
-                     .map((rating, index) => (
-                        <option key={index} value={rating}>
-                           {rating}
-                        </option>
-                     ))}
-               </Form.Control>
-            </Form.Group>
-         )}
-      </>
+            {data.products
+               .map((product) => parseInt(product.rating))
+               .filter((value, index, self) => self.indexOf(value) === index)
+               .sort()
+               .map((rating, index) => (
+                  <option key={index} value={rating}>
+                     {rating}
+                  </option>
+               ))}
+         </Form.Control>
+      </Form.Group>
    );
 };
 

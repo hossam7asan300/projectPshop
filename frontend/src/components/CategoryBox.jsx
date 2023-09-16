@@ -1,23 +1,28 @@
-import React, { useState } from "react";
 import { Form } from "react-bootstrap";
-import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useGetProductsQuery } from "../slices/productsApiSlice";
-import Loader from "./Loader";
-import Message from "./Message";
+import { useDispatch } from "react-redux";
+import { setFilter } from "../slices/filterSlice";
+import { useSelector } from "react-redux";
+// import Loader from "./Loader";
+// import Message from "./Message";
 
 const CategoryBox = () => {
    const navigate = useNavigate();
-   const { Category: urlCategory } = useParams();
+   const dispatch = useDispatch();
+   // const { Category: urlCategory } = useParams();
 
    // FIX: uncontrolled input - urlKeyword may be undefined
-   const [category, setCategory] = useState(urlCategory || "");
+   // const [category, setCategory] = useState(urlCategory || "");
 
-   const { data, isLoading, error } = useGetProductsQuery({});
+   // useEffect(() => {}, [urlCategory]);
 
-   const submitHandler = (e) => {
+   const { filter } = useSelector((state) => state.filter);
+   const { data } = useGetProductsQuery({});
+
+   const submitCategoryHandler = (e) => {
       e.preventDefault();
-      setCategory(e.target.value);
+      dispatch(setFilter({ category: e.target.value }));
       if (e.target.value !== "") {
          navigate(`/category/${e.target.value}`);
       } else {
@@ -26,38 +31,27 @@ const CategoryBox = () => {
    };
 
    return (
-      <>
-         {isLoading ? (
-            <Loader />
-         ) : error ? (
-            <Message variant="danger">{error}</Message>
-         ) : (
-            //Select Category Box - START
-            <Form.Group controlId="category">
-               <Form.Label>Category {category}</Form.Label>
-               <Form.Control
-                  as="select"
-                  value={category}
-                  className="my-2"
-                  onChange={(e) => {
-                     submitHandler(e);
-                  }}
-               >
-                  <option value="">All</option>
-                  {data.products
-                     .map((product) => product.category)
-                     .filter(
-                        (value, index, self) => self.indexOf(value) === index
-                     )
-                     .map((category, index) => (
-                        <option key={index} value={category}>
-                           {category}
-                        </option>
-                     ))}
-               </Form.Control>
-            </Form.Group>
-         )}
-      </>
+      <Form.Group controlId="category">
+         <Form.Label>Category {filter.category}</Form.Label>
+         <Form.Control
+            as="select"
+            value={filter.category}
+            className="my-2"
+            onChange={(e) => {
+               submitCategoryHandler(e);
+            }}
+         >
+            <option value="">All</option>
+            {data.products
+               .map((product) => product.category)
+               .filter((value, index, self) => self.indexOf(value) === index)
+               .map((category, index) => (
+                  <option key={index} value={category}>
+                     {category}
+                  </option>
+               ))}
+         </Form.Control>
+      </Form.Group>
    );
 };
 

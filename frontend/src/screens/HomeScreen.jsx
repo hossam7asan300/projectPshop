@@ -9,13 +9,15 @@ import Paginate from "../components/Paginate";
 import ProductCarousel from "../components/ProductCarousel";
 import Meta from "../components/Meta";
 import CategoryBox from "../components/CategoryBox";
-// import CategoryCheckBox from "../components/CategoryCheckBox";
 import BrandBox from "../components/BrandBox";
 import PriceBox from "../components/PriceBox";
 import RatingBox from "../components/RatingBox";
-import PriceBox2 from "../components/PriceBox2";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { clearFilter } from "../slices/filterSlice";
 
 const HomeScreen = () => {
+   const dispatch = useDispatch();
    const { pageNumber, keyword, category, brand, rating, priceFrom, priceTo } =
       useParams();
 
@@ -29,12 +31,21 @@ const HomeScreen = () => {
       priceTo,
    });
 
+   useEffect(() => {
+      dispatch(clearFilter());
+   }, [dispatch]);
    return (
       <>
          {!keyword && !category && !brand && !rating ? (
             <ProductCarousel />
          ) : (
-            <Link to="/" className="btn btn-light mb-4">
+            <Link
+               to="/"
+               className="btn btn-light mb-4"
+               onClick={() => {
+                  dispatch(clearFilter());
+               }}
+            >
                Go Back
             </Link>
          )}
@@ -47,8 +58,8 @@ const HomeScreen = () => {
          ) : (
             <>
                <Meta />
-               <h1>Latest Products</h1>
-               <Row className="">
+               <h1> Products </h1>
+               <Row>
                   <Col md={3}>
                      <CategoryBox />
                   </Col>
