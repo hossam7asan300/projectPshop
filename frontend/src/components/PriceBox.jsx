@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import { Form } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -7,21 +8,26 @@ import Message from "./Message";
 import { Col, Row } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { setFilter } from "../slices/filterSlice";
-import { useEffect } from "react";
 
 const PriceBox = () => {
    const navigate = useNavigate();
    const dispatch = useDispatch();
-
-   // const { category, brand, rating } = useParams();
+   const { minPriceBox: urlMinPrice } = useParams();
+   const { maxPriceBox: urlMaxPrice } = useParams();
+   const { category, brand, rating } = useParams();
 
    // FIX: uncontrolled input - urlKeyword may be undefined
-
-   const { category, rating, brand } = useParams();
-
-   const { data, isLoading, error } = useGetProductsQuery({ category });
+   const { data, isLoading, error } = useGetProductsQuery({
+      category,
+      brand,
+      rating,
+   });
    const min = Math.min(...data.products.map((product) => product.price));
-   const max = Math.max(...data.products.map((product) => product.price));
+
+   const max = Math.max(...data.max.map((product) => product.price));
+
+   const [minPrice, setMinPrice] = useState(urlMinPrice || min);
+   const [maxPrice, setMaxPrice] = useState(urlMaxPrice || max);
 
    useEffect(() => {
       dispatch(
@@ -33,37 +39,23 @@ const PriceBox = () => {
             priceTo: max,
          })
       );
-   }, [dispatch, category, brand, rating, min, max]);
+      setMinPrice(urlMinPrice || min);
+      setMaxPrice(urlMaxPrice || max);
+   }, [dispatch, category, brand, rating, min, max, urlMinPrice, urlMaxPrice]);
+
    const submitMinHandler = (e) => {
       e.preventDefault();
-      navigate("/");
-      dispatch(
-         setFilter({
-            category: category,
-            brand: brand,
-            rating: rating,
-            priceFrom: e.target.value,
-            priceTo: max,
-         })
-      );
+      setMinPrice(e.target.value);
       if (e.target.value > min && e.target.value < max) {
-         navigate(`priceFrom/${e.target.value}/priceTo/${max}`);
+         navigate(`/priceFrom/${e.target.value}/priceTo/${maxPrice}`);
       }
    };
    const submitMaxHandler = (e) => {
       e.preventDefault();
       navigate("/");
-      dispatch(
-         setFilter({
-            category: category,
-            brand: brand,
-            rating: rating,
-            priceFrom: min,
-            priceTo: e.target.value,
-         })
-      );
+      setMaxPrice(e.target.value);
       if (e.target.value > min && e.target.value < max) {
-         navigate(`priceFrom/${min}/priceTo/${e.target.value}`);
+         navigate(`priceFrom/${minPrice}/priceTo/${e.target.value}`);
       }
    };
 
@@ -78,10 +70,10 @@ const PriceBox = () => {
             <Row>
                <Col md={6}>
                   <Form.Group controlId="minPrice">
-                     <Form.Label>Price From {min}</Form.Label>
+                     <Form.Label>Price From {minPrice}</Form.Label>
                      <Form.Control
                         type="number"
-                        value={min}
+                        value={minPrice}
                         className="my-2"
                         onChange={(e) => {
                            submitMinHandler(e);
@@ -91,11 +83,11 @@ const PriceBox = () => {
                </Col>
                <Col md={6}>
                   <Form.Group controlId="minPrice">
-                     <Form.Label>Price To {max}</Form.Label>
+                     <Form.Label>Price To {maxPrice}</Form.Label>
 
                      <Form.Control
                         type="number"
-                        value={max}
+                        value={maxPrice}
                         className="my-2"
                         onChange={(e) => {
                            submitMaxHandler(e);

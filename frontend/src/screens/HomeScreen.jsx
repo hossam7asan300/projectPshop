@@ -12,16 +12,16 @@ import CategoryBox from "../components/CategoryBox";
 import BrandBox from "../components/BrandBox";
 import PriceBox from "../components/PriceBox";
 import RatingBox from "../components/RatingBox";
-import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { clearFilter } from "../slices/filterSlice";
+import { useEffect } from "react";
 
 const HomeScreen = () => {
    const dispatch = useDispatch();
    const { pageNumber, keyword, category, brand, rating, priceFrom, priceTo } =
       useParams();
 
-   const { data, isLoading, error } = useGetProductsQuery({
+   const { data, refetch, isLoading, error } = useGetProductsQuery({
       keyword,
       pageNumber,
       category,
@@ -30,22 +30,17 @@ const HomeScreen = () => {
       priceFrom,
       priceTo,
    });
-
    useEffect(() => {
       dispatch(clearFilter());
-   }, [dispatch]);
+      refetch();
+   }, [dispatch, refetch]);
+
    return (
       <>
          {!keyword && !category && !brand && !rating ? (
             <ProductCarousel />
          ) : (
-            <Link
-               to="/"
-               className="btn btn-light mb-4"
-               onClick={() => {
-                  dispatch(clearFilter());
-               }}
-            >
+            <Link to="/" className="btn btn-light mb-4">
                Go Back
             </Link>
          )}

@@ -5,16 +5,6 @@ import Product from "../models/productModel.js";
 // @route   GET /api/products
 // @access  Public
 const getProducts = asyncHandler(async (req, res) => {
-   console.log({
-      category: req.query.category,
-      keyword: req.query.keyword,
-      brand: req.query.brand,
-      rating: req.query.rating,
-      priceFrom: req.query.priceFrom,
-      price: req.query.price,
-      req: req.query,
-   });
-
    const pageSize = process.env.PAGINATION_LIMIT;
    const page = Number(req.query.pageNumber) || 1;
 
@@ -37,6 +27,11 @@ const getProducts = asyncHandler(async (req, res) => {
         }
       : {};
 
+   // brand filter
+   if (req.query.brand == "All") {
+      req.query.brand = "";
+   }
+
    const brand = req.query.brand
       ? {
            brand: {
@@ -45,6 +40,7 @@ const getProducts = asyncHandler(async (req, res) => {
            },
         }
       : {};
+
    // rating is number and get rating and more than number rating
    const rating = Number(req.query.rating)
       ? {
@@ -68,7 +64,13 @@ const getProducts = asyncHandler(async (req, res) => {
            }
          : {};
 
-   const count = await Product.countDocuments({ ...keyword });
+   const count = await Product.countDocuments({
+      ...keyword,
+      ...category,
+      ...brand,
+      ...rating,
+      ...price,
+   });
    const products = await Product.find({
       ...keyword,
       ...category,
@@ -79,7 +81,19 @@ const getProducts = asyncHandler(async (req, res) => {
       .limit(pageSize)
       .skip(pageSize * (page - 1));
 
-   res.json({ products, page, pages: Math.ceil(count / pageSize) });
+   const max = await Product.find({
+      ...keyword,
+      ...category,
+      ...brand,
+      ...rating,
+      ...price,
+   })
+      .sort({ price: -1 })
+      .limit(1);
+
+   // find max price
+
+   res.json({ products, page, max, pages: Math.ceil(count / pageSize) });
 });
 
 // @desc    Fetch My products

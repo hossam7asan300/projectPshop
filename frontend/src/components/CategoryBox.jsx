@@ -22,7 +22,7 @@ const CategoryBox = () => {
 
    const submitCategoryHandler = (e) => {
       e.preventDefault();
-      dispatch(setFilter({ category: e.target.value }));
+      dispatch(setFilter({ brand: "", rating: "", category: e.target.value }));
       if (e.target.value !== "") {
          navigate(`/category/${e.target.value}`);
       } else {

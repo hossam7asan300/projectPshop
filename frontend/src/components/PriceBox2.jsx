@@ -1,68 +1,100 @@
-import React, { useState } from "react";
-import { Form } from "react-bootstrap";
-import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setFilter } from "../slices/filterSlice";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import { useGetProductsQuery } from "../slices/productsApiSlice";
-import Loader from "./Loader";
-import Message from "./Message";
-import { toast } from "react-toastify";
+import { useEffect } from "react";
 
 const PriceBox2 = () => {
    const navigate = useNavigate();
-   const { PriceBox: urlRating } = useParams();
-   const { category } = useParams();
+   const dispatch = useDispatch();
+   const { filter } = useSelector((state) => state.filter);
+   const { category, brand, rating } = useParams();
+   const { data } = useGetProductsQuery({ category, brand, rating });
+   const min = Math.min(...data.products.map((product) => product.price));
+   const max = Math.max(...data.products.map((product) => product.price));
 
-   // FIX: uncontrolled input - urlKeyword may be undefined
-   const [price, setPrice] = useState(urlRating || "");
+   useEffect(() => {
+      dispatch(
+         setFilter({
+            category: category,
+            brand: brand,
+            rating: rating,
+            priceFrom: min,
+            priceTo: max,
+         })
+      );
+   }, [dispatch, category, brand, rating, min, max]);
 
-   const { data, isLoading, error } = useGetProductsQuery({ category });
+   // useEffect(() => {
+   //    dispatch(
+   //       setFilter({
+   //          category: category,
+   //          brand: brand,
+   //          rating: rating,
+   //          priceFrom: min,
+   //          priceTo: max,
+   //       })
+   //    );
 
-   const submitHandler = (e) => {
-      e.preventDefault();
-      setPrice(e.target.value);
-      if (e.target.value !== 0) {
-         toast.success("Price Added");
-         navigate(`/price/${e.target.value}`);
-      } else {
-         navigate("/");
+   // }, [dispatch, category, brand, rating, min, max]);
+
+   const submitMinHandler = (value) => {
+      dispatch(
+         setFilter({
+            category: category,
+            brand: brand,
+            rating: rating,
+            priceFrom: value,
+            priceTo: max,
+         })
+      );
+      if (value > min && value < max) {
+         navigate(`priceFrom/${value}/priceTo/${max}`);
+      }
+   };
+   const submitMaxHandler = (value) => {
+      dispatch(
+         setFilter({
+            category: category,
+            brand: brand,
+            rating: rating,
+            priceFrom: min,
+            priceTo: value,
+         })
+      );
+      if (value > min && value < max) {
+         navigate(`priceFrom/${min}/priceTo/${value}`);
       }
    };
 
    return (
-      <>
-         {isLoading ? (
-            <Loader />
-         ) : error ? (
-            <Message variant="danger">{error}</Message>
-         ) : (
-            //Select Brand Box - START
-            <Form.Group controlId="Brand">
-               <Form.Label>Price 2 {price}</Form.Label>
-               <Form.Control
-                  as="select"
-                  value={price}
-                  className="my-2"
+      <div>
+         <div>PriceBox2</div>
+         <div>
+            <div>
+               <label>Price From</label>
+               <input
+                  type="number"
+                  value={filter.priceFrom}
                   onChange={(e) => {
-                     submitHandler(e);
+                     submitMinHandler(e.target.value);
                   }}
-               >
-                  <option value="0">All</option>
-
-                  {data.products
-                     .map((product) => product.price)
-                     .filter(
-                        (value, index, self) => self.indexOf(value) === index
-                     )
-                     .map((price, index) => (
-                        <option key={index} value={price}>
-                           {price}
-                        </option>
-                     ))}
-               </Form.Control>
-            </Form.Group>
-         )}
-      </>
+               />
+            </div>
+            <div>
+               <label>Price To</label>
+               <input
+                  type="number"
+                  value={filter.priceTo}
+                  onChange={(e) => {
+                     submitMaxHandler(e.target.value);
+                  }}
+               />
+            </div>
+         </div>
+      </div>
    );
 };
-
 export default PriceBox2;

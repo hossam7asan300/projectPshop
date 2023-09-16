@@ -4,7 +4,6 @@ import { useGetProductsQuery } from "../slices/productsApiSlice";
 import { useDispatch } from "react-redux";
 import { setFilter } from "../slices/filterSlice";
 import { useSelector } from "react-redux";
-import { toast } from "react-toastify";
 
 const BrandBox = () => {
    const navigate = useNavigate();
@@ -17,17 +16,17 @@ const BrandBox = () => {
    const { data } = useGetProductsQuery({ category });
    const submitHandler = (e) => {
       e.preventDefault();
-      dispatch(setFilter({ category: category, brand: e.target.value }));
-
-      toast.success("category = " + category + "brand" + e.target.value);
+      dispatch(
+         setFilter({ category: category, brand: e.target.value, rating: "" })
+      );
       if (e.target.value !== "") {
-         if (category !== "") {
+         if (category > "") {
             navigate(`/category/${category}/brand/${e.target.value}`);
          } else {
             navigate(`/brand/${e.target.value}`);
          }
       } else {
-         if (category !== "") {
+         if (category > "") {
             navigate(`/category/${category}`);
          } else {
             navigate(`/`);

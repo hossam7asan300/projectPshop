@@ -17,7 +17,6 @@ const filterSlice = createSlice({
       clearFilter(state) {
          state.filter = initialState.filter;
          localStorage.removeItem("filter");
-         return state;
       },
    },
 });

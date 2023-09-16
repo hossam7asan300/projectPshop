@@ -18,7 +18,6 @@ const Header = () => {
 
    const [logoutApiCall] = useLogoutMutation();
 
-   // console.log(cartItems.length);
    const logoutHandler = async (e) => {
       try {
          await logoutApiCall().unwrap();
@@ -36,7 +35,6 @@ const Header = () => {
                   to="/"
                   onClick={() => {
                      dispatch(clearFilter());
-                     console.log("clearFilter");
                   }}
                >
                   <Navbar.Brand>

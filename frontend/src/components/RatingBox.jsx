@@ -6,7 +6,6 @@ import { useGetProductsQuery } from "../slices/productsApiSlice";
 import { useDispatch } from "react-redux";
 import { setFilter } from "../slices/filterSlice";
 import { useSelector } from "react-redux";
-import { toast } from "react-toastify";
 
 const BrandBox = () => {
    const navigate = useNavigate();
@@ -30,39 +29,31 @@ const BrandBox = () => {
       if (e.target.value > "") {
          if (category > "") {
             if (brand > "") {
-               toast.success(1);
                navigate(
                   `/category/${category}/brand/${brand}/rating/${e.target.value}`
                );
             } else {
                navigate(`/category/${category}/rating/${e.target.value}`);
-               toast.success(2);
             }
          } else {
             if (brand > "") {
                navigate(`/brand/${brand}/rating/${e.target.value}`);
-               toast.success(3);
             } else {
                navigate(`/rating/${e.target.value}`);
-               toast.success(4);
             }
          }
       } else {
          if (category > "") {
             if (brand > "") {
                navigate(`/category/${category}/brand/${brand}`);
-               toast.success(5);
             } else {
                navigate(`/category/${category}`);
-               toast.success(6);
             }
          } else {
             if (brand > "") {
                navigate(`/brand/${brand}`);
-               toast.success(7);
             } else {
                navigate(`/`);
-               toast.success(8);
             }
          }
       }
