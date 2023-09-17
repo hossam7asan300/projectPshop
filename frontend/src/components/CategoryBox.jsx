@@ -2,7 +2,13 @@ import { Form } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { setCategory } from "../slices/filterSlice";
 import { useDispatch } from "react-redux";
-import { setBrand, setRating, setPage } from "../slices/filterSlice";
+import {
+   setBrand,
+   setRating,
+   setPage,
+   setPriceFrom,
+   setPriceTo,
+} from "../slices/filterSlice";
 
 const CategoryBox = ({ data, refetch }) => {
    const dispatch = useDispatch();
@@ -34,6 +40,16 @@ const CategoryBox = ({ data, refetch }) => {
                dispatch(
                   setRating({
                      rating: "",
+                  })
+               );
+               dispatch(
+                  setPriceFrom({
+                     priceFrom: "",
+                  })
+               );
+               dispatch(
+                  setPriceTo({
+                     priceTo: "",
                   })
                );
 

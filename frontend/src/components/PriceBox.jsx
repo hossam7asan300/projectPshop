@@ -11,29 +11,25 @@ const PriceBox = ({ filterData }) => {
    const min = Math.min(...filterData().map((product) => product.price));
    const max = Math.max(...filterData().map((product) => product.price));
 
-   const [priceFromMin, setPriceFromMin] = useState(filter.priceFrom || min);
-   const [priceToMax, setPriceToMax] = useState(filter.priceTo || max);
+   useEffect(() => {
+      if (filter.priceFrom === "")
+         dispatch(
+            setPriceFrom({
+               priceFrom: min,
+            })
+         );
+   }, [dispatch, min, filter.priceFrom]);
 
    useEffect(() => {
-      // console.log(min);
-      dispatch(
-         setPriceFrom({
-            priceFrom: min,
-         })
-      );
-   }, [dispatch, min]);
-
-   useEffect(() => {
-      // console.log(max);
-      dispatch(
-         setPriceTo({
-            priceTo: max,
-         })
-      );
-   }, [dispatch, max]);
+      if (filter.priceTo === "")
+         dispatch(
+            setPriceTo({
+               priceTo: max,
+            })
+         );
+   }, [dispatch, max, filter.priceTo]);
 
    const submitMinHandler = (value) => {
-      setPriceFromMin(value);
       dispatch(
          setPriceFrom({
             priceFrom: value,
@@ -41,7 +37,6 @@ const PriceBox = ({ filterData }) => {
       );
    };
    const submitMaxHandler = (value) => {
-      setPriceToMax(value);
       dispatch(
          setPriceTo({
             priceTo: value,
