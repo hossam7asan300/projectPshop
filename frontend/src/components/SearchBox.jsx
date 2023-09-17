@@ -1,23 +1,20 @@
-import React, { useState } from "react";
 import { Form, Button } from "react-bootstrap";
-import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+// import { useSelector } from "react-redux";
+// import { useDispatch } from "react-redux";
+import { setKeyword } from "../slices/filterSlice";
 
 const SearchBox = () => {
-   const navigate = useNavigate();
-   const { keyword: urlKeyword } = useParams();
+   // const dispatch = useDispatch();
+
+   // const { filter } = useSelector((state) => state.filter);
+
+   // const { keyword: urlKeyword } = useParams();
 
    // FIX: uncontrolled input - urlKeyword may be undefined
-   const [keyword, setKeyword] = useState(urlKeyword || "");
+   // const [keywords] = useState(urlKeyword || "");
 
    const submitHandler = (e) => {
-      e.preventDefault();
-      if (keyword) {
-         navigate(`/search/${keyword.trim()}`);
-         setKeyword("");
-      } else {
-         navigate("/");
-      }
+      // dispatch(setKeyword({ keyword: e.target.value }));
    };
 
    return (
@@ -25,8 +22,8 @@ const SearchBox = () => {
          <Form.Control
             type="text"
             name="q"
+            // value={filter.keyKey}
             onChange={(e) => setKeyword(e.target.value)}
-            value={keyword}
             placeholder="Search Products..."
             className="mr-sm-2 ml-sm-5"
          ></Form.Control>

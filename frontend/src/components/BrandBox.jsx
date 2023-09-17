@@ -1,52 +1,42 @@
 import { Form } from "react-bootstrap";
-import { useNavigate, useParams } from "react-router-dom";
-import { useGetProductsQuery } from "../slices/productsApiSlice";
 import { useDispatch } from "react-redux";
-import { setFilter } from "../slices/filterSlice";
+import { setBrand, setRating, setPage } from "../slices/filterSlice";
 import { useSelector } from "react-redux";
 
-const BrandBox = () => {
-   const navigate = useNavigate();
+const BrandBox = ({ data }) => {
    const dispatch = useDispatch();
+   const filter = useSelector((state) => state.filter);
 
-   const { filter } = useSelector((state) => state.filter);
-
-   const { category } = useParams();
-
-   const { data } = useGetProductsQuery({ category });
-   const submitHandler = (e) => {
-      e.preventDefault();
-      dispatch(
-         setFilter({ category: category, brand: e.target.value, rating: "" })
-      );
-      if (e.target.value !== "") {
-         if (category > "") {
-            navigate(`/category/${category}/brand/${e.target.value}`);
-         } else {
-            navigate(`/brand/${e.target.value}`);
-         }
-      } else {
-         if (category > "") {
-            navigate(`/category/${category}`);
-         } else {
-            navigate(`/`);
-         }
-      }
+   const filterCatData = () => {
+      if (filter.category === "") return data.products;
+      else
+         return data.products.filter(
+            (product) => product.category === filter.category
+         );
    };
-
    return (
       <Form.Group controlId="Brand">
-         <Form.Label>Brand {filter.brand}</Form.Label>
+         <Form.Label>Brand</Form.Label>
          <Form.Control
             as="select"
             value={filter.brand}
             className="my-2"
             onChange={(e) => {
-               submitHandler(e);
+               dispatch(setBrand({ brand: e.target.value }));
+               dispatch(
+                  setRating({
+                     rating: "",
+                  })
+               );
+               dispatch(
+                  setPage({
+                     pageNumber: 1,
+                  })
+               );
             }}
          >
             <option value="">All</option>
-            {data.products
+            {filterCatData()
                .map((product) => product.brand)
                .filter((value, index, self) => self.indexOf(value) === index)
                .map((brand, index) => (

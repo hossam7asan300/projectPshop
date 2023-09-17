@@ -41,45 +41,6 @@ const router = createBrowserRouter(
       <Route path="/" element={<App />}>
          <Route index={true} path="/" element={<HomeScreen />} />
          <Route path="/search/:keyword" element={<HomeScreen />} />
-         <Route path="/category/:category" element={<HomeScreen />} />
-         <Route path="/brand/:brand" element={<HomeScreen />} />
-         <Route path="/Rating/:rating" element={<HomeScreen />} />
-
-         <Route
-            path="/priceFrom/:priceFrom/priceTo/:priceTo"
-            element={<HomeScreen />}
-         />
-         <Route
-            path="/category/:category/brand/:brand"
-            element={<HomeScreen />}
-         />
-         <Route
-            path="/category/:category/brand/:brand/rating/:rating"
-            element={<HomeScreen />}
-         />
-         <Route
-            path="/category/:category/brand/:brand/rating/:rating/priceFrom/:priceFrom/priceTo/:priceTo"
-            element={<HomeScreen />}
-         />
-         <Route
-            path="/category/:category/rating/:rating"
-            element={<HomeScreen />}
-         />
-         <Route
-            path="/category/:category/rating/:rating/priceFrom/:priceFrom/priceTo/:priceTo"
-            element={<HomeScreen />}
-         />
-         <Route
-            path="/category/:category/priceFrom/:priceFrom/priceTo/:priceTo"
-            element={<HomeScreen />}
-         />
-         <Route
-            path="/category/:category/brand/:brand/priceFrom/:priceFrom/priceTo/:priceTo"
-            element={<HomeScreen />}
-         />
-
-         <Route path="/page/:pageNumber" element={<HomeScreen />} />
-
          <Route
             path="/search/:keyword/page/:pageNumber"
             element={<HomeScreen />}

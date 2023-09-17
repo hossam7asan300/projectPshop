@@ -1,78 +1,45 @@
 import { Form } from "react-bootstrap";
-import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { useGetProductsQuery } from "../slices/productsApiSlice";
-
 import { useDispatch } from "react-redux";
-import { setFilter } from "../slices/filterSlice";
+import { setRating, setPage } from "../slices/filterSlice";
 import { useSelector } from "react-redux";
 
-const BrandBox = () => {
-   const navigate = useNavigate();
+const BrandBox = ({ data }) => {
    const dispatch = useDispatch();
-
-   const { filter } = useSelector((state) => state.filter);
-
-   const { category, brand } = useParams();
-
-   const { data } = useGetProductsQuery({ category, brand });
-   const submitHandler = (e) => {
-      e.preventDefault();
-      dispatch(
-         setFilter({
-            category: category,
-            brand: brand,
-            rating: e.target.value,
-         })
-      );
-
-      if (e.target.value > "") {
-         if (category > "") {
-            if (brand > "") {
-               navigate(
-                  `/category/${category}/brand/${brand}/rating/${e.target.value}`
-               );
-            } else {
-               navigate(`/category/${category}/rating/${e.target.value}`);
-            }
-         } else {
-            if (brand > "") {
-               navigate(`/brand/${brand}/rating/${e.target.value}`);
-            } else {
-               navigate(`/rating/${e.target.value}`);
-            }
-         }
-      } else {
-         if (category > "") {
-            if (brand > "") {
-               navigate(`/category/${category}/brand/${brand}`);
-            } else {
-               navigate(`/category/${category}`);
-            }
-         } else {
-            if (brand > "") {
-               navigate(`/brand/${brand}`);
-            } else {
-               navigate(`/`);
-            }
-         }
-      }
+   const filter = useSelector((state) => state.filter);
+   const filterData = () => {
+      if (filter.category === "" && filter.brand === "") return data.products;
+      else if (filter.category !== "" && filter.brand === "")
+         return data.products.filter(
+            (product) => product.category === filter.category
+         );
+      else if (filter.category === "" && filter.brand !== "")
+         return data.products.filter(
+            (product) => product.brand === filter.brand
+         );
+      else
+         return data.products
+            .filter((product) => product.category === filter.category)
+            .filter((product) => product.brand === filter.brand);
    };
-
    return (
       <Form.Group controlId="Brand">
-         <Form.Label>Rating {filter.rating}</Form.Label>
+         <Form.Label>Rating </Form.Label>
          <Form.Control
             as="select"
             value={filter.rating}
             className="my-2"
             onChange={(e) => {
-               submitHandler(e);
+               dispatch(setRating({ rating: e.target.value }));
+               dispatch(
+                  setPage({
+                     pageNumber: 1,
+                  })
+               );
             }}
          >
             <option value="">All</option>
 
-            {data.products
+            {filterData()
                .map((product) => parseInt(product.rating))
                .filter((value, index, self) => self.indexOf(value) === index)
                .sort()

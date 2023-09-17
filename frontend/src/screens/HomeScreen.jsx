@@ -1,48 +1,114 @@
-import { Row, Col } from "react-bootstrap";
-import { useParams } from "react-router-dom";
+import { Row, Col, Button } from "react-bootstrap";
+
 import { useGetProductsQuery } from "../slices/productsApiSlice";
 import { Link } from "react-router-dom";
 import Product from "../components/Product";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
-import Paginate from "../components/Paginate";
+import Paginate2 from "../components/Paginate2";
 import ProductCarousel from "../components/ProductCarousel";
 import Meta from "../components/Meta";
-import CategoryBox from "../components/CategoryBox";
-import BrandBox from "../components/BrandBox";
 import PriceBox from "../components/PriceBox";
-import RatingBox from "../components/RatingBox";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { clearFilter } from "../slices/filterSlice";
 import { useEffect } from "react";
+import CategoryBox from "../components/CategoryBox";
+import BrandBox from "../components/BrandBox";
+import RatingBox from "../components/RatingBox";
+// import PriceTest from "../components/PriceTest";
 
 const HomeScreen = () => {
    const dispatch = useDispatch();
-   const { pageNumber, keyword, category, brand, rating, priceFrom, priceTo } =
-      useParams();
 
-   const { data, refetch, isLoading, error } = useGetProductsQuery({
-      keyword,
-      pageNumber,
-      category,
-      brand,
-      rating,
-      priceFrom,
-      priceTo,
-   });
+   const { data, refetch, isLoading, error } = useGetProductsQuery({});
+
    useEffect(() => {
       dispatch(clearFilter());
-      refetch();
-   }, [dispatch, refetch]);
+   }, [dispatch]);
+
+   const filter = useSelector((state) => state.filter);
+   const NumberD = 8;
+   const fP = () => {
+      return filter.pageNumber * NumberD - NumberD;
+      // }
+   };
+
+   const lP = () => {
+      return filter.pageNumber * NumberD;
+   };
+
+   const filterData = () => {
+      const temp = data.products;
+
+      if (filter.category === "" && filter.brand === "" && filter.rating === "")
+         return temp;
+      else if (
+         filter.category !== "" &&
+         filter.brand === "" &&
+         filter.rating === ""
+      )
+         return temp.filter((product) => product.category === filter.category);
+      else if (
+         filter.category === "" &&
+         filter.brand !== "" &&
+         filter.rating === ""
+      )
+         return temp.filter((product) => product.brand === filter.brand);
+      else if (
+         filter.category === "" &&
+         filter.brand === "" &&
+         filter.rating !== ""
+      )
+         return temp.filter((product) => product.rating >= filter.rating);
+      else if (
+         filter.category !== "" &&
+         filter.brand !== "" &&
+         filter.rating === ""
+      )
+         return temp
+            .filter((product) => product.category === filter.category)
+            .filter((product) => product.brand === filter.brand);
+      else if (
+         filter.category !== "" &&
+         filter.brand === "" &&
+         filter.rating !== ""
+      )
+         return temp
+            .filter((product) => product.category === filter.category)
+            .filter((product) => product.rating >= filter.rating);
+      else if (
+         filter.category === "" &&
+         filter.brand !== "" &&
+         filter.rating !== ""
+      )
+         return temp
+            .filter((product) => product.brand === filter.brand)
+            .filter((product) => product.rating >= filter.rating);
+      else if (
+         filter.category !== "" &&
+         filter.brand !== "" &&
+         filter.rating !== ""
+      )
+         return temp
+            .filter((product) => product.category === filter.category)
+            .filter((product) => product.brand === filter.brand)
+            .filter((product) => product.rating >= filter.rating);
+   };
 
    return (
       <>
-         {!keyword && !category && !brand && !rating ? (
+         {!filter.keyword &&
+         !filter.category &&
+         !filter.brand &&
+         !filter.rating ? (
             <ProductCarousel />
          ) : (
-            <Link to="/" className="btn btn-light mb-4">
-               Go Back
-            </Link>
+            <Button
+               onClick={() => dispatch(clearFilter())}
+               className="btn btn-light"
+            >
+               Clear Filter
+            </Button>
          )}
          {isLoading ? (
             <Loader />
@@ -53,33 +119,42 @@ const HomeScreen = () => {
          ) : (
             <>
                <Meta />
-               <h1> Products </h1>
+               <h1>Products</h1>
                <Row>
                   <Col md={3}>
-                     <CategoryBox />
+                     <CategoryBox data={data} refetch={refetch} />
                   </Col>
                   <Col md={3}>
-                     <BrandBox />
+                     <BrandBox data={data} refetch={refetch} />
                   </Col>
                   <Col md={3}>
-                     <PriceBox />
+                     <PriceBox refetch={refetch} filterData={filterData} />
                   </Col>
                   <Col md={3}>
-                     <RatingBox />
+                     <RatingBox data={data} refetch={refetch} />
                   </Col>
                </Row>
+
                <Row>
-                  {data.products.map((product) => (
-                     <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
-                        <Product product={product} />
-                     </Col>
-                  ))}
+                  <h1>Products </h1>
+                  {filterData()
+                     .filter((product) => product.price >= filter.priceFrom)
+                     .filter((product) => product.price <= filter.priceTo)
+                     .slice(fP(), lP())
+                     .map((product) => (
+                        <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
+                           <Product product={product} />
+                        </Col>
+                     ))}
                </Row>
-               <Paginate
-                  pages={data.pages}
-                  page={data.page}
-                  keyword={keyword ? keyword : ""}
+               <Paginate2
+                  data={data}
+                  refetch={refetch}
+                  filterData={filterData}
+                  NumberD={NumberD}
                />
+
+               {/* <PriceTest /> */}
             </>
          )}
       </>

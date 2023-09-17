@@ -1,44 +1,43 @@
 import { Form } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
-import { useGetProductsQuery } from "../slices/productsApiSlice";
-import { useDispatch } from "react-redux";
-import { setFilter } from "../slices/filterSlice";
 import { useSelector } from "react-redux";
-// import Loader from "./Loader";
-// import Message from "./Message";
+import { setCategory } from "../slices/filterSlice";
+import { useDispatch } from "react-redux";
+import { setBrand, setRating, setPage } from "../slices/filterSlice";
 
-const CategoryBox = () => {
-   const navigate = useNavigate();
+const CategoryBox = ({ data, refetch }) => {
    const dispatch = useDispatch();
-   // const { Category: urlCategory } = useParams();
-
-   // FIX: uncontrolled input - urlKeyword may be undefined
-   // const [category, setCategory] = useState(urlCategory || "");
-
-   // useEffect(() => {}, [urlCategory]);
-
-   const { filter } = useSelector((state) => state.filter);
-   const { data } = useGetProductsQuery({});
-
-   const submitCategoryHandler = (e) => {
-      e.preventDefault();
-      dispatch(setFilter({ brand: "", rating: "", category: e.target.value }));
-      if (e.target.value !== "") {
-         navigate(`/category/${e.target.value}`);
-      } else {
-         navigate("/");
-      }
-   };
+   const filter = useSelector((state) => state.filter);
 
    return (
       <Form.Group controlId="category">
-         <Form.Label>Category {filter.category}</Form.Label>
+         <Form.Label>Category</Form.Label>
          <Form.Control
             as="select"
             value={filter.category}
             className="my-2"
             onChange={(e) => {
-               submitCategoryHandler(e);
+               dispatch(
+                  setPage({
+                     pageNumber: 1,
+                  })
+               );
+               dispatch(
+                  setCategory({
+                     category: e.target.value,
+                  })
+               );
+               dispatch(
+                  setBrand({
+                     brand: "",
+                  })
+               );
+               dispatch(
+                  setRating({
+                     rating: "",
+                  })
+               );
+
+               refetch();
             }}
          >
             <option value="">All</option>

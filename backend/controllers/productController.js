@@ -5,95 +5,32 @@ import Product from "../models/productModel.js";
 // @route   GET /api/products
 // @access  Public
 const getProducts = asyncHandler(async (req, res) => {
-   const pageSize = process.env.PAGINATION_LIMIT;
-   const page = Number(req.query.pageNumber) || 1;
+   // const pageSize = process.env.PAGINATION_LIMIT;
+   // const page = Number(req.query.pageNumber) || 1;
 
-   const keyword = req.query.keyword
-      ? {
-           name: {
-              $regex: req.query.keyword,
-              $options: "i",
-           },
-        }
-      : {};
+   // const keyword = req.query.keyword
+   //    ? {
+   //         name: {
+   //            $regex: req.query.keyword,
+   //            $options: "i",
+   //         },
+   //      }
+   //    : {};
 
    // category filter
-   const category = req.query.category
-      ? {
-           category: {
-              $regex: req.query.category,
-              $options: "i",
-           },
-        }
-      : {};
 
-   // brand filter
-   if (req.query.brand == "All") {
-      req.query.brand = "";
-   }
-
-   const brand = req.query.brand
-      ? {
-           brand: {
-              $regex: req.query.brand,
-              $options: "i",
-           },
-        }
-      : {};
-
-   // rating is number and get rating and more than number rating
-   const rating = Number(req.query.rating)
-      ? {
-           rating: {
-              $gte: Number(req.query.rating),
-           },
-        }
-      : {
-           rating: {
-              $gte: 0,
-           },
-        };
-
-   const price =
-      Number(req.query.priceFrom) && Number(req.query.priceTo)
-         ? {
-              price: {
-                 $gte: Number(req.query.priceFrom),
-                 $lte: Number(req.query.priceTo),
-              },
-           }
-         : {};
-
-   const count = await Product.countDocuments({
-      ...keyword,
-      ...category,
-      ...brand,
-      ...rating,
-      ...price,
-   });
+   // const count = await Product.countDocuments({
+   //    ...keyword,
+   // });
    const products = await Product.find({
-      ...keyword,
-      ...category,
-      ...brand,
-      ...rating,
-      ...price,
-   })
-      .limit(pageSize)
-      .skip(pageSize * (page - 1));
-
-   const max = await Product.find({
-      ...keyword,
-      ...category,
-      ...brand,
-      ...rating,
-      ...price,
-   })
-      .sort({ price: -1 })
-      .limit(1);
+      // ...keyword,
+   });
+   // .limit(pageSize)
+   // .skip(pageSize * (page - 1));
 
    // find max price
-
-   res.json({ products, page, max, pages: Math.ceil(count / pageSize) });
+   // page, pages: Math.ceil(count / pageSize)
+   res.json({ products });
 });
 
 // @desc    Fetch My products
