@@ -31,13 +31,8 @@ const Header = () => {
       <header>
          <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
             <Container>
-               <LinkContainer
-                  to="/"
-                  onClick={() => {
-                     dispatch(clearFilter());
-                  }}
-               >
-                  <Navbar.Brand>
+               <LinkContainer to="/">
+                  <Navbar.Brand onClick={() => dispatch(clearFilter())}>
                      <img
                         src={logo}
                         alt="logo"

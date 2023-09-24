@@ -1,48 +1,44 @@
 import { Form, Row, Col } from "react-bootstrap";
-import { useDispatch } from "react-redux";
-import { setPriceFrom, setPriceTo } from "../slices/filterSlice";
-import { useSelector } from "react-redux";
-import { useEffect } from "react";
+// import { useDispatch } from "react-redux";
+// import { setPriceFrom, setPriceTo } from "../slices/filterSlice";
+// import { useSelector } from "react-redux";
+// import { useEffect } from "react";
 import { useState } from "react";
 
 const PriceBox = ({ filterData }) => {
-   const dispatch = useDispatch();
-   const filter = useSelector((state) => state.filter);
+   // const dispatch = useDispatch();
+   // const filter = useSelector((state) => state.filter);
    const min = Math.min(...filterData().map((product) => product.price));
    const max = Math.max(...filterData().map((product) => product.price));
+   const [pFrom, setPFrom] = useState("");
+   const [pTo, setPTo] = useState("");
 
-   useEffect(() => {
-      if (filter.priceFrom === "")
-         dispatch(
-            setPriceFrom({
-               priceFrom: min,
-            })
-         );
-   }, [dispatch, min, filter.priceFrom]);
-
-   useEffect(() => {
-      if (filter.priceTo === "")
-         dispatch(
-            setPriceTo({
-               priceTo: max,
-            })
-         );
-   }, [dispatch, max, filter.priceTo]);
-
-   const submitMinHandler = (value) => {
-      dispatch(
-         setPriceFrom({
-            priceFrom: value,
-         })
-      );
-   };
-   const submitMaxHandler = (value) => {
-      dispatch(
-         setPriceTo({
-            priceTo: value,
-         })
-      );
-   };
+   // useEffect(() => {
+   //    dispatch(
+   //       setPriceFrom({
+   //          priceFrom: "",
+   //       })
+   //    );
+   //    dispatch(
+   //       setPriceTo({
+   //          priceTo: "",
+   //       })
+   //    );
+   // }, [dispatch]);
+   // useEffect(() => {
+   //    if (filter.priceTo === max)
+   //       dispatch(
+   //          setPriceTo({
+   //             priceTo: max,
+   //          })
+   //       );
+   //    else if (filter.priceTo === 0)
+   //       dispatch(
+   //          setPriceTo({
+   //             priceTo: max,
+   //          })
+   //       );
+   // }, [dispatch, max, filter.priceTo]);
 
    return (
       <Row>
@@ -53,8 +49,16 @@ const PriceBox = ({ filterData }) => {
                   type="number"
                   placeholder="Enter price from"
                   className="my-2"
-                  value={filter.priceFrom || min}
-                  onChange={(e) => submitMinHandler(e.target.value)}
+                  value={pFrom || min}
+                  disabled
+                  onChange={(e) => {
+                     setPFrom(e.target.value);
+                     // dispatch(
+                     //    setPriceFrom({
+                     //       priceFrom: e.target.value,
+                     //    })
+                     // );
+                  }}
                ></Form.Control>
             </Form.Group>
          </Col>
@@ -65,8 +69,16 @@ const PriceBox = ({ filterData }) => {
                   type="number"
                   placeholder="Enter price to"
                   className="my-2"
-                  value={filter.priceTo || max}
-                  onChange={(e) => submitMaxHandler(e.target.value)}
+                  value={pTo || max}
+                  disabled
+                  onChange={(e) => {
+                     setPTo(e.target.value);
+                     // dispatch(
+                     //    setPriceTo({
+                     //       priceTo: e.target.value,
+                     //    })
+                     // );
+                  }}
                ></Form.Control>
             </Form.Group>
          </Col>

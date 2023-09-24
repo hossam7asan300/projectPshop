@@ -1,6 +1,6 @@
 import { Form } from "react-bootstrap";
 import { useDispatch } from "react-redux";
-import { setRating, setPage } from "../slices/filterSlice";
+import { setRating, setPage, setKeywords } from "../slices/filterSlice";
 import { useSelector } from "react-redux";
 
 const BrandBox = ({ data }) => {
@@ -33,6 +33,11 @@ const BrandBox = ({ data }) => {
                dispatch(
                   setPage({
                      pageNumber: 1,
+                  })
+               );
+               dispatch(
+                  setKeywords({
+                     keywords: "",
                   })
                );
             }}

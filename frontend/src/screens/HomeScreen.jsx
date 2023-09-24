@@ -15,6 +15,8 @@ import { useEffect } from "react";
 import CategoryBox from "../components/CategoryBox";
 import BrandBox from "../components/BrandBox";
 import RatingBox from "../components/RatingBox";
+// import FilterBy from "../components/FilterBy";
+
 // import PriceTest from "../components/PriceTest";
 
 const HomeScreen = () => {
@@ -30,14 +32,13 @@ const HomeScreen = () => {
    const NumberD = 8;
    const fP = () => {
       return filter.pageNumber * NumberD - NumberD;
-      // }
    };
 
    const lP = () => {
       return filter.pageNumber * NumberD;
    };
 
-   const filterData = () => {
+   const filterD1 = () => {
       const temp = data.products;
 
       if (filter.category === "" && filter.brand === "" && filter.rating === "")
@@ -95,9 +96,32 @@ const HomeScreen = () => {
             .filter((product) => product.rating >= filter.rating);
    };
 
+   // const filterD2 = () => {
+   //    const temp = filterD2();
+   //    if (filter.priceFrom === 0 && filter.priceTo === 0) return temp;
+   //    else if (filter.priceFrom !== 0 && filter.priceTo === 0)
+   //       return temp.filter((product) => product.price >= filter.priceFrom);
+   //    else if (filter.priceFrom === 0 && filter.priceTo !== 0)
+   //       return temp.filter((product) => product.price <= filter.priceTo);
+   //    else if (filter.priceFrom !== 0 && filter.priceTo !== 0)
+   //       return temp
+   //          .filter((product) => product.price >= filter.priceFrom)
+   //          .filter((product) => product.price <= filter.priceTo);
+   // };
+
+   const filterData = () => {
+      const temp = filterD1();
+      if (filter.keywords === "") return temp;
+      else
+         return temp.filter((product) =>
+            // product.name.toLowerCase().includes(filter.keyword.toLowerCase())
+            product.name.toLowerCase().includes(filter.keywords.toLowerCase())
+         );
+   };
+
    return (
       <>
-         {!filter.keyword &&
+         {!filter.keywords &&
          !filter.category &&
          !filter.brand &&
          !filter.rating ? (
@@ -127,6 +151,7 @@ const HomeScreen = () => {
                   <Col md={3}>
                      <BrandBox data={data} refetch={refetch} />
                   </Col>
+
                   <Col md={3}>
                      <PriceBox refetch={refetch} filterData={filterData} />
                   </Col>
@@ -138,8 +163,6 @@ const HomeScreen = () => {
                <Row>
                   <h1>Products </h1>
                   {filterData()
-                     .filter((product) => product.price >= filter.priceFrom)
-                     .filter((product) => product.price <= filter.priceTo)
                      .slice(fP(), lP())
                      .map((product) => (
                         <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
@@ -147,14 +170,13 @@ const HomeScreen = () => {
                         </Col>
                      ))}
                </Row>
+
                <Paginate2
                   data={data}
                   refetch={refetch}
                   filterData={filterData}
                   NumberD={NumberD}
                />
-
-               {/* <PriceTest /> */}
             </>
          )}
       </>

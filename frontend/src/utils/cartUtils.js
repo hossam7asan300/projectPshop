@@ -1,6 +1,8 @@
 const addDecimals = (num) => {
    return (Math.round(num * 100) / 100).toFixed(2);
 };
+// 25
+// 25.00
 
 export const updateCart = (state) => {
    //calculate items price

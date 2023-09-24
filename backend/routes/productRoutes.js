@@ -11,12 +11,20 @@ import {
    updateProductQty,
    getMyProducts,
 } from "../controllers/productController.js";
-import { protect, admin } from "../middleware/authMiddleware.js";
+import {
+   protect,
+   admin,
+   adminOrSupplier,
+   supplier,
+} from "../middleware/authMiddleware.js";
 import checkObjectId from "../middleware/checkObjectId.js";
 
-router.route("/").get(getProducts).post(protect, createProduct);
+router
+   .route("/")
+   .get(getProducts)
+   .post(protect, adminOrSupplier, createProduct);
 
-router.route("/myproducts").get(protect, getMyProducts);
+router.route("/myproducts").get(protect, adminOrSupplier, getMyProducts);
 router.route("/:id/reviews").post(protect, checkObjectId, createProductReview);
 router.get("/top", getTopProducts);
 router
@@ -24,6 +32,6 @@ router
    .get(checkObjectId, getProductById)
    .put(protect, checkObjectId, updateProduct)
    .delete(protect, checkObjectId, deleteProduct);
-router.route("/:id/qty").put(updateProductQty);
+router.route("/:id/qty").put(checkObjectId, updateProductQty);
 
 export default router;

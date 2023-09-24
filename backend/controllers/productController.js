@@ -5,55 +5,19 @@ import Product from "../models/productModel.js";
 // @route   GET /api/products
 // @access  Public
 const getProducts = asyncHandler(async (req, res) => {
-   // const pageSize = process.env.PAGINATION_LIMIT;
-   // const page = Number(req.query.pageNumber) || 1;
-
-   // const keyword = req.query.keyword
-   //    ? {
-   //         name: {
-   //            $regex: req.query.keyword,
-   //            $options: "i",
-   //         },
-   //      }
-   //    : {};
-
-   // category filter
-
-   // const count = await Product.countDocuments({
-   //    ...keyword,
-   // });
-   const products = await Product.find({
-      // ...keyword,
-   });
-   // .limit(pageSize)
-   // .skip(pageSize * (page - 1));
-
-   // find max price
-   // page, pages: Math.ceil(count / pageSize)
-   res.json({ products });
+   const products = await Product.find({});
+   res.status(200).json({ products });
 });
 
 // @desc    Fetch My products
 // @route   GET /api/products/myproducts
 // @access  Private
 const getMyProducts = asyncHandler(async (req, res) => {
-   const pageSize = process.env.PAGINATION_LIMIT;
-   const page = Number(req.query.pageNumber) || 1;
-   const keyword = req.query.keyword
-      ? {
-           name: {
-              $regex: req.query.keyword,
-              $options: "i",
-           },
-        }
-      : {};
-   const count = await Product.countDocuments({ ...keyword });
-   const products = await Product.find({ ...keyword, user: req.user._id })
-      .limit(pageSize)
-      .skip(pageSize * (page - 1));
-   res.json({ products, page, pages: Math.ceil(count / pageSize) });
-   // const Products = await Product.find({ user: req.user._id });
-   // res.status(200).json(Products);
+   // const pageSize = process.env.PAGINATION_LIMIT;
+   // const page = Number(req.query.pageNumber) || 1;
+
+   const products = await Product.find({ user: req.user._id });
+   res.status(200).json({ products });
 });
 
 // @desc    Fetch single product
@@ -78,6 +42,7 @@ const getProductById = asyncHandler(async (req, res) => {
 // @route   POST /api/products
 // @access  Private/Admin
 const createProduct = asyncHandler(async (req, res) => {
+   // res.send("admin");
    const product = new Product({
       name: "Sample name",
       price: 0,
@@ -89,8 +54,8 @@ const createProduct = asyncHandler(async (req, res) => {
       numReviews: 0,
       description: "Sample description",
    });
-
    const createdProduct = await product.save();
+   console.log(product);
    res.status(201).json(createdProduct);
 });
 
@@ -146,7 +111,9 @@ const updateProductQty = asyncHandler(async (req, res) => {
 // @access  Private/Admin
 const deleteProduct = asyncHandler(async (req, res) => {
    const product = await Product.findById(req.params.id);
-
+   // const product = await Product.findByIdAndDelete(req.params.id);
+   //  const product = await Product.deleteMany(req.params.id);
+   // res.json({ message: "Product removed" });
    if (product) {
       await Product.deleteOne({ _id: product._id });
       res.json({ message: "Product removed" });

@@ -4,11 +4,10 @@ import { setPage } from "../slices/filterSlice";
 import { useDispatch } from "react-redux";
 const Paginate2 = ({ refetch, filterData, NumberD }) => {
    const dispatch = useDispatch();
-   // const count = data.products.length;
+
    const filter = useSelector((state) => state.filter);
-   const count = filterData()
-      .filter((product) => product.price >= filter.priceFrom)
-      .filter((product) => product.price <= filter.priceTo).length;
+   const count = filterData().length;
+
    const pages = Math.ceil(count / NumberD);
    return (
       pages > 1 && (

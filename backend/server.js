@@ -22,6 +22,9 @@ app.use(cookieParser());
 
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
+// app.get("/api/users", (req, res) => {
+//    res.send("Hello World!");
+// });
 app.use("/api/orders", orderRoutes);
 app.use("/api/upload", uploadRoutes);
 

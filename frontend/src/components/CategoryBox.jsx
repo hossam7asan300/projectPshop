@@ -1,6 +1,6 @@
 import { Form } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import { setCategory } from "../slices/filterSlice";
+import { setCategory, setKeywords } from "../slices/filterSlice";
 import { useDispatch } from "react-redux";
 import {
    setBrand,
@@ -43,6 +43,11 @@ const CategoryBox = ({ data, refetch }) => {
                   })
                );
                dispatch(
+                  setKeywords({
+                     keywords: "",
+                  })
+               );
+               dispatch(
                   setPriceFrom({
                      priceFrom: "",
                   })
@@ -52,7 +57,6 @@ const CategoryBox = ({ data, refetch }) => {
                      priceTo: "",
                   })
                );
-
                refetch();
             }}
          >

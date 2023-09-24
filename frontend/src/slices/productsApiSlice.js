@@ -4,20 +4,15 @@ import { apiSlice } from "./apiSlice";
 export const productsApiSlice = apiSlice.injectEndpoints({
    endpoints: (builder) => ({
       getProducts: builder.query({
-         query: ({ keyword, pageNumber }) => ({
+         query: () => ({
             url: PRODUCTS_URL,
-            params: {
-               keyword,
-               pageNumber,
-            },
          }),
-         keepUnusedDataFor: 5,
+         keepUnusedDataFor: 1,
          providesTags: ["Products"],
       }),
       getMyProducts: builder.query({
-         query: ({ keyword, pageNumber }) => ({
+         query: () => ({
             url: `${PRODUCTS_URL}/myproducts`,
-            params: { keyword, pageNumber },
          }),
          keepUnusedDataFor: 5,
       }),
@@ -26,6 +21,8 @@ export const productsApiSlice = apiSlice.injectEndpoints({
             url: `${PRODUCTS_URL}/${productId}`,
          }),
          keepUnusedDataFor: 5,
+         //what mean keepUnusedDataFor: 5?
+         //https://redux-toolkit.js.org/rtk-query/usage/queries#keepunuseddatafor
       }),
       createProduct: builder.mutation({
          query: () => ({

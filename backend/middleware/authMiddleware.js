@@ -26,10 +26,19 @@ const protect = asyncHandler(async (req, res, next) => {
       throw new Error("Not authorized, no token");
    }
 });
-
 // User must be an admin
 const admin = (req, res, next) => {
    if (req.user && req.user.isAdmin) {
+      next();
+   } else {
+      res.status(401);
+      throw new Error("Not authorized as an admin");
+   }
+};
+
+// User must be an admin
+const adminOrSupplier = (req, res, next) => {
+   if ((req.user && req.user.isAdmin) || (req.user && req.user.isSupplier)) {
       next();
    } else {
       res.status(401);
@@ -47,4 +56,4 @@ const supplier = (req, res, next) => {
    }
 };
 
-export { protect, admin };
+export { protect, admin, adminOrSupplier, supplier };
